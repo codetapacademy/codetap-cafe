@@ -13,15 +13,21 @@ class App extends Component {
       .get()
       .then(snapshot => {
         this.setState({
-          nameList: snapshot.docs.map(doc => doc.data())
+          nameList: snapshot.docs.map(doc => ({
+            ...doc.data(),
+            id: doc.id
+          }))
         });
       });
   }
   renderNameList = () => {
     const { nameList } = this.state;
-    return nameList.map(({ name }) => {
-      const id = `name-id-${Math.random()}`;
-      return <div key={id}>{name}</div>;
+    return nameList.map(({ name, id }) => {
+      return (
+        <div key={id} data-id={id}>
+          {name}
+        </div>
+      );
     });
   };
   render() {
