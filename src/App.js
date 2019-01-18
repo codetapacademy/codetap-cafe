@@ -30,11 +30,33 @@ class App extends Component {
       );
     });
   };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    const name = this.refs["my-form"].name.value;
+    firestore.collection("chat").add({ name });
+    this.refs["my-form"].name.value = "";
+  };
+
+  renderAddName = () => {
+    const { handleSubmit } = this;
+    return (
+      <form ref="my-form" onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="name">Name:</label>
+          <input name="name" />
+        </div>
+      </form>
+    );
+  };
+
   render() {
+    const { renderNameList, renderAddName } = this;
     return (
       <div className="App">
         List of names
-        {this.renderNameList()}
+        {renderAddName()}
+        {renderNameList()}
       </div>
     );
   }
