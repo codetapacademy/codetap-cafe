@@ -8,17 +8,14 @@ class App extends Component {
     nameList: []
   };
   componentDidMount() {
-    firestore
-      .collection("chat")
-      .get()
-      .then(snapshot => {
-        this.setState({
-          nameList: snapshot.docs.map(doc => ({
-            ...doc.data(),
-            id: doc.id
-          }))
-        });
+    firestore.collection("chat").onSnapshot(snapshot => {
+      this.setState({
+        nameList: snapshot.docs.map(doc => ({
+          ...doc.data(),
+          id: doc.id
+        }))
       });
+    });
   }
   renderNameList = () => {
     const { nameList } = this.state;
