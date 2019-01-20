@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./codetap-cafe.css";
 
 import { firestore } from "./firebase";
+import Auth from "./container/auth";
 
 class CodetapCafe extends Component {
   state = {
@@ -51,6 +52,9 @@ class CodetapCafe extends Component {
     const { renderNameList, renderAddName } = this;
     return (
       <div className="codetap-cafe">
+        <div>
+          <Auth />
+        </div>
         List of names
         {renderAddName()}
         {renderNameList()}
