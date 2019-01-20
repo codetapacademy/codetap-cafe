@@ -3,7 +3,7 @@ import "./codetap-cafe.css";
 
 import { firestore } from "./firebase";
 import Auth from "./container/auth";
-import { initialState, reducer} from './redux';
+import { initialState, reducer } from "./redux";
 
 // import AddName from "./component/add-name";
 
@@ -12,6 +12,7 @@ export const DispatchContext = createContext();
 
 const CodetapCafe = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const nameRef = useRef(null);
 
   useEffect(() => {
     firestore.collection("chat").onSnapshot(snapshot => {
@@ -23,14 +24,14 @@ const CodetapCafe = () => {
       };
 
       dispatch({
-        type: 'TEST',
+        type: "TEST",
         payload: names.nameList
       });
     });
   }, []);
 
   const renderNameList = () => {
-    console.log(state.nameList)
+    console.log(state.nameList);
     return state.nameList.map(({ name, id }) => {
       return (
         <div key={id} data-id={id}>
@@ -40,31 +41,23 @@ const CodetapCafe = () => {
     });
   };
 
-  // const handleSubmit = e => {
-  //   e.preventDefault();
-  //   // const name = this.refs["my-form"].name.value;
-  //   // const name = useRef(null);
-  //   // this.refs["my-form"].name.value = "";
-  // };
+  const handleSubmit = e => {
+    e.preventDefault();
+    firestore.collection("chat").add({ name: nameRef.current.value });
+    nameRef.current.value = "";
+  };
 
   const renderAddName = () => {
-    const name = useRef(null);
-
-    const handleSubmit = () => {
-      firestore.collection("chat").add({ name });
-    }
-    
     return (
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="name">Name:</label>
-          <input name="name" />
+          <input ref={nameRef} name="name" />
         </div>
       </form>
     );
   };
   // console.log(state)
-
 
   return (
     <DispatchContext.Provider value={dispatch}>
@@ -80,6 +73,6 @@ const CodetapCafe = () => {
       </StateContext.Provider>
     </DispatchContext.Provider>
   );
-}
+};
 
 export default CodetapCafe;
