@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import "./codetap-cafe.css";
 
 import { firestore } from "./firebase";
-import Auth from "./container/auth/auth.container";
+import Auth from "./container/auth";
 
 class CodetapCafe extends Component {
   state = {
