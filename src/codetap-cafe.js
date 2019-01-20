@@ -1,26 +1,37 @@
-import React, { Component } from "react";
+import React, { createContext, useReducer, useEffect, useRef } from "react";
 import "./codetap-cafe.css";
 
 import { firestore } from "./firebase";
 import Auth from "./container/auth";
+import { initialState, reducer} from './redux';
 
-class CodetapCafe extends Component {
-  state = {
-    nameList: []
-  };
-  componentDidMount() {
+// import AddName from "./component/add-name";
+
+export const StateContext = createContext(initialState);
+export const DispatchContext = createContext();
+
+const CodetapCafe = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
     firestore.collection("chat").onSnapshot(snapshot => {
-      this.setState({
+      const names = {
         nameList: snapshot.docs.map(doc => ({
           ...doc.data(),
           id: doc.id
         }))
+      };
+
+      dispatch({
+        type: 'TEST',
+        payload: names.nameList
       });
     });
-  }
-  renderNameList = () => {
-    const { nameList } = this.state;
-    return nameList.map(({ name, id }) => {
+  }, []);
+
+  const renderNameList = () => {
+    console.log(state.nameList)
+    return state.nameList.map(({ name, id }) => {
       return (
         <div key={id} data-id={id}>
           {name}
@@ -29,38 +40,44 @@ class CodetapCafe extends Component {
     });
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
-    const name = this.refs["my-form"].name.value;
-    firestore.collection("chat").add({ name });
-    this.refs["my-form"].name.value = "";
-  };
+  // const handleSubmit = e => {
+  //   e.preventDefault();
+  //   // const name = this.refs["my-form"].name.value;
+  //   // const name = useRef(null);
+  //   // this.refs["my-form"].name.value = "";
+  // };
 
-  renderAddName = () => {
-    const { handleSubmit } = this;
-    return (
-      <form ref="my-form" onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="name">Name:</label>
-          <input name="name" />
-        </div>
-      </form>
-    );
-  };
+  // const renderAddName = () => {
+  //   const name = useRef(null);
+  //   const handleSubmit = () => {
+  //     firestore.collection("chat").add({ name });
+  //   }
+  //   return (
+  //     <form onSubmit={handleSubmit}>
+  //       <div>
+  //         <label htmlFor="name">Name:</label>
+  //         <input name="name" />
+  //       </div>
+  //     </form>
+  //   );
+  // };
+  // console.log(state)
 
-  render() {
-    const { renderNameList, renderAddName } = this;
-    return (
-      <div className="codetap-cafe">
-        <div>
-          <Auth />
+
+  return (
+    <DispatchContext.Provider value={dispatch}>
+      <StateContext.Provider value={state}>
+        <div className="codetap-cafe">
+          <div>
+            <Auth />
+          </div>
+          List of names
+          {/*renderAddName()*/}
+          {renderNameList()}
         </div>
-        List of names
-        {renderAddName()}
-        {renderNameList()}
-      </div>
-    );
-  }
+      </StateContext.Provider>
+    </DispatchContext.Provider>
+  );
 }
 
 export default CodetapCafe;
