@@ -1,25 +1,23 @@
-import React, { Component } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./codetap-cafe.css";
-
-import { firestore } from "./firebase";
 import Auth from "./container/auth";
 
-class CodetapCafe extends Component {
-  state = {
-    nameList: []
-  };
-  componentDidMount() {
+import { firestore } from "./firebase";
+
+const CodetapCafe = () => {
+  const [nameList, setNameList] = useState([]);
+  const formRef = useRef(null);
+  useEffect(() => {
     firestore.collection("chat").onSnapshot(snapshot => {
-      this.setState({
-        nameList: snapshot.docs.map(doc => ({
+      setNameList(
+        snapshot.docs.map(doc => ({
           ...doc.data(),
           id: doc.id
         }))
-      });
+      );
     });
-  }
-  renderNameList = () => {
-    const { nameList } = this.state;
+  }, []);
+  const renderNameList = () => {
     return nameList.map(({ name, id }) => {
       return (
         <div key={id} data-id={id}>
@@ -28,18 +26,16 @@ class CodetapCafe extends Component {
       );
     });
   };
-
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
-    const name = this.refs["my-form"].name.value;
-    firestore.collection("chat").add({ name });
-    this.refs["my-form"].name.value = "";
-  };
 
-  renderAddName = () => {
-    const { handleSubmit } = this;
+    const name = formRef.current.name.value;
+    firestore.collection("chat").add({ name });
+    formRef.current.name.value = "";
+  };
+  const renderAddName = () => {
     return (
-      <form ref="my-form" onSubmit={handleSubmit}>
+      <form ref={formRef} onSubmit={handleSubmit}>
         <div>
           <label htmlFor="name">Name:</label>
           <input name="name" />
@@ -47,20 +43,16 @@ class CodetapCafe extends Component {
       </form>
     );
   };
-
-  render() {
-    const { renderNameList, renderAddName } = this;
-    return (
-      <div className="codetap-cafe">
-        <div>
-          <Auth />
-        </div>
-        List of names
-        {renderAddName()}
-        {renderNameList()}
+  return (
+    <div className="codetap-cafe">
+      <div>
+        <Auth />
       </div>
-    );
-  }
-}
+      List of names
+      {renderAddName()}
+      {renderNameList()}
+    </div>
+  );
+};
 
 export default CodetapCafe;
