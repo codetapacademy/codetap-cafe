@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import "./App.css";
+import "./codetap-cafe.css";
 
 import { firestore } from "./firebase";
 
-class App extends Component {
+class CodetapCafe extends Component {
   state = {
     nameList: []
   };
@@ -50,7 +50,7 @@ class App extends Component {
   render() {
     const { renderNameList, renderAddName } = this;
     return (
-      <div className="App">
+      <div className="codetap-cafe">
         List of names
         {renderAddName()}
         {renderNameList()}
@@ -59,4 +59,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default CodetapCafe;
