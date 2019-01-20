@@ -1,2 +1,2 @@
-import Button from './button.component.js'
-export defaul Button
+import Button from "./button.component.js";
+export default Button;
