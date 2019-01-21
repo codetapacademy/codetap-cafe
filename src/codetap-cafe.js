@@ -46,22 +46,28 @@ const CodetapCafe = () => {
   //   // const name = useRef(null);
   //   // this.refs["my-form"].name.value = "";
   // };
+  
+  const renderAddName = () => {
 
-  // const renderAddName = () => {
-  //   const name = useRef(null);
-  //   const handleSubmit = () => {
-  //     firestore.collection("chat").add({ name });
-  //   }
-  //   return (
-  //     <form onSubmit={handleSubmit}>
-  //       <div>
-  //         <label htmlFor="name">Name:</label>
-  //         <input name="name" />
-  //       </div>
-  //     </form>
-  //   );
-  // };
-  // console.log(state)
+    const name = useRef(null);
+    
+    const handleSubmit = (event) => {
+      const ceva = name.current.value;
+      event.preventDefault();
+      firestore.collection("chat").add({ ceva });
+      console.log(name.current.value)
+    }
+    return (
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label  htmlFor="name">Name:</label>
+          <input name="name" ref={name} />
+          <button onClick={handleSubmit}>try</button>
+          </div>
+      </form>
+    );
+  };
+  // // console.log(state)
 
 
   return (
@@ -72,7 +78,7 @@ const CodetapCafe = () => {
             <Auth />
           </div>
           List of names
-          {/*renderAddName()*/}
+          {renderAddName()}
           {renderNameList()}
         </div>
       </StateContext.Provider>
