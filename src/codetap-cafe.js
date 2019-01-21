@@ -5,13 +5,15 @@ import { firestore } from "./firebase";
 import Auth from "./container/auth";
 import { initialState, reducer} from './redux';
 
-// import AddName from "./component/add-name";
 
 export const StateContext = createContext(initialState);
 export const DispatchContext = createContext();
 
+
 const CodetapCafe = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const inputValue = useRef(null);
+
 
   useEffect(() => {
     firestore.collection("chat").onSnapshot(snapshot => {
@@ -30,7 +32,6 @@ const CodetapCafe = () => {
   }, []);
 
   const renderNameList = () => {
-    console.log(state.nameList)
     return state.nameList.map(({ name, id }) => {
       return (
         <div key={id} data-id={id}>
@@ -40,34 +41,24 @@ const CodetapCafe = () => {
     });
   };
 
-  // const handleSubmit = e => {
-  //   e.preventDefault();
-  //   // const name = this.refs["my-form"].name.value;
-  //   // const name = useRef(null);
-  //   // this.refs["my-form"].name.value = "";
-  // };
-  
+  const handleSubmit = (event) => {
+    const name = inputValue.current.value;
+    event.preventDefault();
+    firestore.collection("chat").add({ name });
+  }
+
   const renderAddName = () => {
-    const name = useRef(null);
     
-    const handleSubmit = (event) => {
-      const ceva = name.current.value;
-      event.preventDefault();
-      firestore.collection("chat").add({ ceva });
-      console.log(name.current.value)
-    }
     return (
       <form onSubmit={handleSubmit}>
         <div>
           <label  htmlFor="name">Name:</label>
-          <input name="name" ref={name} />
+          <input name="name" ref={inputValue} />
           <button onClick={handleSubmit}>try</button>
           </div>
       </form>
     );
   };
-  // // console.log(state)
-
 
   return (
     <DispatchContext.Provider value={dispatch}>
