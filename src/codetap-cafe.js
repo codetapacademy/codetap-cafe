@@ -1,7 +1,7 @@
 import React, { createContext, useReducer, useEffect, useRef } from "react";
 import "./codetap-cafe.css";
 
-import { firestore } from "./firebase";
+import { firestore, firebase } from "./firebase";
 import Auth from "./container/auth";
 import { initialState, reducer } from "./redux";
 
@@ -15,35 +15,54 @@ const CodetapCafe = () => {
   const nameRef = useRef(null);
 
   useEffect(() => {
-    firestore.collection("chat").onSnapshot(snapshot => {
-      const names = {
-        nameList: snapshot.docs.map(doc => ({
-          ...doc.data(),
-          id: doc.id
-        }))
-      };
-
-      dispatch({
-        type: "TEST",
-        payload: names.nameList
+    const unsubscribe = firestore
+      .collection("chat")
+      .orderBy("updatedAt")
+      .onSnapshot(snapshot => {
+        snapshot.docChanges().forEach(({ type }) => {
+          if (type === "added") {
+            dispatch({
+              type: "TEST",
+              payload: snapshot.docs.map(doc => ({
+                ...doc.data(),
+                id: doc.id
+              }))
+            });
+          }
+        });
       });
-    });
   }, []);
 
   const renderNameList = () => {
-    console.log(state.nameList);
-    return state.nameList.map(({ name, id }) => {
-      return (
-        <div key={id} data-id={id}>
-          {name}
-        </div>
-      );
-    });
+    console.log(state.nameList.length);
+    return state.nameList.length ? (
+      state.nameList.map(({ name, id, updatedAt = { seconds: 0 } }) => {
+        return (
+          <div key={id} data-id={id}>
+            {name}
+          </div>
+        );
+      })
+    ) : (
+      <div>Loading data</div>
+    );
   };
 
   const handleSubmit = e => {
+    const updatedAt = firebase.firestore.FieldValue.serverTimestamp();
     e.preventDefault();
-    firestore.collection("chat").add({ name: nameRef.current.value });
+    firestore
+      .collection("chat")
+      .add({ name: nameRef.current.value, updatedAt })
+      .then(docRef => {
+        console.log(`Success! handleSumbit()`);
+        // Object.keys(docRef),
+        // docRef.firestore,
+        // docRef.id
+      })
+      .catch(error => {
+        console.log(`Error! handleSumbit()`, error);
+      });
     nameRef.current.value = "";
   };
 
@@ -68,7 +87,7 @@ const CodetapCafe = () => {
           </div>
           List of names
           {renderAddName()}
-          {renderNameList()}
+          {state.nameList.length ? renderNameList() : "Loading ..."}
         </div>
       </StateContext.Provider>
     </DispatchContext.Provider>
