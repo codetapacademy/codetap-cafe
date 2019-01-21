@@ -49,6 +49,7 @@ const CodetapCafe = () => {
   
   const renderAddName = () => {
 
+<<<<<<< HEAD
     const name = useRef(null);
     
     const handleSubmit = (event) => {
@@ -68,6 +69,25 @@ const CodetapCafe = () => {
     );
   };
   // // console.log(state)
+=======
+  const renderAddName = () => {
+    const name = useRef(null);
+
+    const handleSubmit = () => {
+      firestore.collection("chat").add({ name });
+    }
+    
+    return (
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="name">Name:</label>
+          <input name="name" />
+        </div>
+      </form>
+    );
+  };
+  // console.log(state)
+>>>>>>> 7502575afb6996f444754c3cd094e877345f1fc2
 
 
   return (
