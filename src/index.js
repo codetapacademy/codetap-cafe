@@ -6,7 +6,7 @@ import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
   <CodetapCafe />,
-  document.getElementById("render-will-react-here")
+  document.getElementById("react-will-render-here")
 );
 
 // If you want your app to work offline and load faster, you can change

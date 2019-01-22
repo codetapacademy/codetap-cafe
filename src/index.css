@@ -12,3 +12,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+html,
+body,
+#react-will-render-here {
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
