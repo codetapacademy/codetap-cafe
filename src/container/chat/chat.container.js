@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import TextArea from "../../component/text-area";
 
 const ChatWrapper = styled.div`
   display: grid;
@@ -14,9 +15,22 @@ const ChatBody = styled.div`
 `;
 
 const Chat = () => {
+  const [currentMessage, setCurrentMessage] = useState("");
+
+  const handleOnChange = e => {
+    const { value } = e.currentTarget;
+    setCurrentMessage(value);
+  };
+
   return (
     <ChatWrapper>
-      <ChatBody>Chat body</ChatBody>
+      <ChatBody>
+        <TextArea
+          placeholder="Write a message"
+          onChange={handleOnChange}
+          value={currentMessage}
+        />
+      </ChatBody>
     </ChatWrapper>
   );
 };
