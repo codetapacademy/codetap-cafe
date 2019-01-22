@@ -1,38 +1,26 @@
-import React, { createContext, useReducer, useEffect, useRef } from "react";
+import React, { Component } from "react";
 import "./codetap-cafe.css";
 
 import { firestore } from "./firebase";
 import Auth from "./container/auth";
-import { initialState, reducer} from './redux';
 
-
-export const StateContext = createContext(initialState);
-export const DispatchContext = createContext();
-
-
-const CodetapCafe = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const inputValue = useRef(null);
-
-
-  useEffect(() => {
+class CodetapCafe extends Component {
+  state = {
+    nameList: []
+  };
+  componentDidMount() {
     firestore.collection("chat").onSnapshot(snapshot => {
-      const names = {
+      this.setState({
         nameList: snapshot.docs.map(doc => ({
           ...doc.data(),
           id: doc.id
         }))
-      };
-
-      dispatch({
-        type: 'TEST',
-        payload: names.nameList
       });
     });
-  }, []);
-
-  const renderNameList = () => {
-    return state.nameList.map(({ name, id }) => {
+  }
+  renderNameList = () => {
+    const { nameList } = this.state;
+    return nameList.map(({ name, id }) => {
       return (
         <div key={id} data-id={id}>
           {name}
@@ -41,39 +29,38 @@ const CodetapCafe = () => {
     });
   };
 
-  const handleSubmit = (event) => {
-    const name = inputValue.current.value;
-    event.preventDefault();
+  handleSubmit = e => {
+    e.preventDefault();
+    const name = this.refs["my-form"].name.value;
     firestore.collection("chat").add({ name });
-  }
+    this.refs["my-form"].name.value = "";
+  };
 
-  const renderAddName = () => {
-    
+  renderAddName = () => {
+    const { handleSubmit } = this;
     return (
-      <form onSubmit={handleSubmit}>
+      <form ref="my-form" onSubmit={handleSubmit}>
         <div>
-          <label  htmlFor="name">Name:</label>
-          <input name="name" ref={inputValue} />
-          <button onClick={handleSubmit}>try</button>
-          </div>
+          <label htmlFor="name">Name:</label>
+          <input name="name" />
+        </div>
       </form>
     );
   };
 
-  return (
-    <DispatchContext.Provider value={dispatch}>
-      <StateContext.Provider value={state}>
-        <div className="codetap-cafe">
-          <div>
-            <Auth />
-          </div>
-          List of names
-          {renderAddName()}
-          {renderNameList()}
+  render() {
+    const { renderNameList, renderAddName } = this;
+    return (
+      <div className="codetap-cafe">
+        <div>
+          <Auth />
         </div>
-      </StateContext.Provider>
-    </DispatchContext.Provider>
-  );
+        List of names
+        {renderAddName()}
+        {renderNameList()}
+      </div>
+    );
+  }
 }
 
 export default CodetapCafe;
