@@ -1,4 +1,4 @@
-import React, { createContext, useReducer, useEffect, useRef } from "react";
+import React, { Component } from "react";
 import "./codetap-cafe.css";
 
 import { firestore, firebase } from "./firebase";
@@ -75,7 +75,7 @@ const CodetapCafe = () => {
 
   const renderAddName = () => {
     return (
-      <form onSubmit={handleSubmit}>
+      <form ref="my-form" onSubmit={handleSubmit}>
         <div>
           <label htmlFor="name">Name:</label>
           <input ref={nameRef} name="name" />
