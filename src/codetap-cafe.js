@@ -4,11 +4,18 @@ import "./codetap-cafe.css";
 import { firestore, firebase } from "./firebase";
 import Auth from "./container/auth";
 import { initialState, reducer } from "./redux";
+import Chat from "./container/chat";
+
+import styled from "styled-components";
 
 // import AddName from "./component/add-name";
 
 export const StateContext = createContext(initialState);
 export const DispatchContext = createContext();
+
+const CodetapCafeWrapper = styled.div`
+  height: 100%;
+`;
 
 const CodetapCafe = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -81,14 +88,15 @@ const CodetapCafe = () => {
   return (
     <DispatchContext.Provider value={dispatch}>
       <StateContext.Provider value={state}>
-        <div className="codetap-cafe">
+        <CodetapCafeWrapper className="codetap-cafe">
           <div>
             <Auth />
           </div>
-          List of names
+          <Chat />
+          {/* List of names
           {renderAddName()}
-          {state.nameList.length ? renderNameList() : "Loading ..."}
-        </div>
+          {state.nameList.length ? renderNameList() : "Loading ..."} */}
+        </CodetapCafeWrapper>
       </StateContext.Provider>
     </DispatchContext.Provider>
   );
