@@ -33,13 +33,12 @@ const Chat = () => {
           .docChanges()
           .map(({ type, doc }) => {
             const { message, updatedAt } = doc.data();
-            if (type === "added") {
-              return {
-                message,
-                time: (updatedAt && updatedAt.seconds) || 0,
-                id: doc.id
-              };
-            }
+            return {
+              message,
+              time: (updatedAt && updatedAt.seconds) || 0,
+              id: doc.id,
+              type
+            };
           })
           .filter(message => message);
 

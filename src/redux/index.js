@@ -8,9 +8,17 @@ export const reducer = (state, action) => {
   switch (action.type) {
     case "UPDATE_LIST":
       // debugger;
+      let messageList = [...state.messageList];
+      action.payload.forEach(message => {
+        if (message.type === "added") {
+          messageList = [...messageList, message];
+        } else if (message.type === "removed") {
+          messageList = messageList.filter(m => m.id !== message.id);
+        }
+      });
       return {
         ...state,
-        messageList: [...state.messageList, ...action.payload]
+        messageList
       };
     default:
       return state;
