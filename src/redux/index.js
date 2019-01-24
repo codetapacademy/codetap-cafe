@@ -1,15 +1,22 @@
+import { createContext, useContext } from "react";
+
 export const initialState = {
-  nameList: []
+  messageList: []
 };
 
 export const reducer = (state, action) => {
   switch (action.type) {
-    case "TEST":
+    case "UPDATE_LIST":
+      // debugger;
       return {
         ...state,
-        nameList: action.payload
+        messageList: [...state.messageList, ...action.payload]
       };
     default:
       return state;
   }
 };
+
+export const StateContext = createContext(initialState);
+export const DispatchContext = createContext();
+export const getState = property => useContext(StateContext)[property];
