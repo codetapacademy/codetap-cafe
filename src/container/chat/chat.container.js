@@ -4,6 +4,7 @@ import TextArea from "../../component/text-area";
 import { firebase, firestore } from "../../firebase";
 import { getState } from "../../redux";
 import { DispatchContext } from "../../redux";
+import Button from "../../component/button";
 
 const ChatWrapper = styled.div`
   display: grid;
@@ -96,6 +97,7 @@ const Chat = () => {
           onKeyDown={handleOnKeyDown}
           value={currentMessage}
         />
+        <Button label="Send" />
       </ChatBody>
     </ChatWrapper>
   );
