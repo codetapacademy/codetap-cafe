@@ -38,6 +38,7 @@ const CodetapCafe = () => {
           }
         });
       });
+    return unsubscribe;
   }, []);
 
   const renderNameList = () => {
@@ -55,27 +56,9 @@ const CodetapCafe = () => {
     );
   };
 
-  const handleSubmit = e => {
-    const updatedAt = firebase.firestore.FieldValue.serverTimestamp();
-    e.preventDefault();
-    firestore
-      .collection("chat")
-      .add({ name: nameRef.current.value, updatedAt })
-      .then(docRef => {
-        console.log(`Success! handleSumbit()`);
-        // Object.keys(docRef),
-        // docRef.firestore,
-        // docRef.id
-      })
-      .catch(error => {
-        console.log(`Error! handleSumbit()`, error);
-      });
-    nameRef.current.value = "";
-  };
-
   const renderAddName = () => {
     return (
-      <form ref="my-form" onSubmit={handleSubmit}>
+      <form ref="my-form" onSubmit={() => {}}>
         <div>
           <label htmlFor="name">Name:</label>
           <input ref={nameRef} name="name" />

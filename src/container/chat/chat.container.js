@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import TextArea from "../../component/text-area";
+import { firebase, firestore } from "../../firebase";
 
 const ChatWrapper = styled.div`
   display: grid;
@@ -17,7 +18,37 @@ const ChatBody = styled.div`
 const Chat = () => {
   const [currentMessage, setCurrentMessage] = useState("");
 
-  const handleOnChange = e => {
+  const handleSubmit = message => {
+    const updatedAt = firebase.firestore.FieldValue.serverTimestamp();
+
+    firestore
+      .collection("chat")
+      .add({ name: message, updatedAt })
+      .then(docRef => {
+        console.log(`Success! handleSumbit()`);
+        // Object.keys(docRef),
+        // docRef.firestore,
+        // docRef.id
+      })
+      .catch(error => {
+        console.log(`Error! handleSumbit()`, error);
+      });
+  };
+
+  const handleOnKeyDown = e => {
+    console.log(e.shiftKey, e.key);
+
+    if (e.shiftKey && e.key === "Enter") {
+      // let the user continue to write on a new line
+      console.log(`DON'T Send the message :)`);
+    } else if (!e.shiftKey && e.key === "Enter") {
+      // send the message away! yeeey
+      console.log(`Send the message`);
+      handleSubmit(e.target.value.trim());
+      e.target.value = "";
+      e.preventDefault();
+    }
+
     const { value } = e.currentTarget;
     setCurrentMessage(value);
   };
@@ -27,7 +58,7 @@ const Chat = () => {
       <ChatBody>
         <TextArea
           placeholder="Write a message"
-          onChange={handleOnChange}
+          onKeyDown={handleOnKeyDown}
           value={currentMessage}
         />
       </ChatBody>

@@ -1,8 +1,12 @@
 import React from "react";
 
-const TextArea = ({ placeholder, onChange, value }) => (
+const TextArea = ({ placeholder, onKeyDown, value }) => (
   <div>
-    <textarea placeholder={placeholder} onChange={onChange} value={value} />
+    <textarea
+      placeholder={placeholder}
+      onKeyDown={onKeyDown}
+      defaultValue={value}
+    />
   </div>
 );
 
