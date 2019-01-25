@@ -1,11 +1,17 @@
 import { createContext, useContext } from "react";
 
 export const initialState = {
-  messageList: []
+  messageList: [],
+  user: null
 };
 
 export const reducer = (state, action) => {
   switch (action.type) {
+    case "UPDATE_USER":
+      return {
+        ...state,
+        user: action.payload
+      };
     case "UPDATE_LIST":
       // debugger;
       let messageList = [...state.messageList];

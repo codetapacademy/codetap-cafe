@@ -2,8 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import TextArea from "../../component/text-area";
 import { firebase, firestore } from "../../firebase";
-import { getState } from "../../redux";
-import { DispatchContext } from "../../redux";
+import { getState, DispatchContext } from "../../redux";
 import Button from "../../component/button";
 
 const ChatWrapper = styled.div`
@@ -21,9 +20,10 @@ const ChatBody = styled.div`
 const Chat = () => {
   const [currentMessage, setCurrentMessage] = useState("");
   const dispatch = useContext(DispatchContext);
-  const meesageList = getState("messageList");
+  const messageList = getState("messageList");
+  const user = getState("user");
 
-  console.log(meesageList);
+  console.log(messageList, user);
 
   useEffect(() => {
     const unsubscribe = firestore
@@ -33,11 +33,12 @@ const Chat = () => {
         const docList = snapshot
           .docChanges()
           .map(({ type, doc }) => {
-            const { message, updatedAt } = doc.data();
+            const { message, updatedAt, user } = doc.data();
             return {
               message,
               time: (updatedAt && updatedAt.seconds) || 0,
               id: doc.id,
+              user,
               type
             };
           })
@@ -57,7 +58,7 @@ const Chat = () => {
 
     firestore
       .collection("chat")
-      .add({ message, updatedAt })
+      .add({ message, updatedAt, user })
       .then(docRef => {
         console.log(`Success! handleSumbit()`);
         // Object.keys(docRef),
@@ -89,7 +90,7 @@ const Chat = () => {
     <ChatWrapper>
       <h1>nananan</h1>
       <ChatBody>
-        {meesageList.map(({ message, id }) => (
+        {messageList.map(({ message, id }) => (
           <div key={id}>{message}</div>
         ))}
         <TextArea

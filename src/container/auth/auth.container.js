@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import Button from "../../component/button/button.component";
 import { firebase, firestore } from "../../firebase";
 import styled from "styled-components";
+import { getState, DispatchContext } from "../../redux";
 
 const AvatarStyled = styled.span`
   width: ${({ width }) => width}px;
@@ -18,7 +19,9 @@ const AuthStyled = styled.span`
 `;
 
 const Auth = () => {
-  const [user, setUser] = useState(null);
+  const dispatch = useContext(DispatchContext);
+  const user = getState("user");
+
   const handleLogIn = () => {
     console.log(`Log me in now!`);
     const googleProvider = new firebase.auth.GoogleAuthProvider();
@@ -35,7 +38,11 @@ const Auth = () => {
       .then(result => {
         console.log(`Signed in successful`, result);
         console.log(`User data`, result.user.providerData[0]);
-        setUser(result.user.providerData[0]);
+        dispatch({
+          type: "UPDATE_USER",
+          payload: result.user.providerData[0]
+        });
+        // setUser(result.user.providerData[0]);
         // Check if the user data is present in the user table
         /**
         displayName: "Marian Zburlea"
@@ -55,7 +62,10 @@ const Auth = () => {
       .signOut()
       .then(() => {
         console.info(`Sign out successful`);
-        setUser(null);
+        dispatch({
+          type: "UPDATE_USER",
+          payload: null
+        });
       })
       .catch(error => console.log(`Sign out failed!`, error));
   };
