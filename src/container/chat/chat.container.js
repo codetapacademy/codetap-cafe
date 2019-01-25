@@ -27,6 +27,7 @@ const ChatMessage = styled.div`
 
 const ChatUser = styled.div`
   font-weight: bold;
+  white-space: nowrap;
 `;
 
 const TextAreaWrapper = styled.div`
@@ -111,7 +112,7 @@ const Chat = () => {
       <ChatBody>
         {messageList.map(({ message, user, id }) => (
           <ChatMessage key={id}>
-            <ChatUser className="chat__user">{user.displayName}:</ChatUser>
+            <ChatUser>{user.displayName}:</ChatUser>
             <div className="chat__message">{message}</div>
           </ChatMessage>
         ))}

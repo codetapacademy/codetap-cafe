@@ -4,6 +4,14 @@ import { firebase, firestore } from "../../firebase";
 import styled from "styled-components";
 import { getState, DispatchContext } from "../../redux";
 
+const ButtonWrapper = styled.div`
+  // flex-grow: 1;
+`;
+
+const AuthGreetWrapper = styled.div`
+  flex-grow: 1;
+`;
+
 const AvatarStyled = styled.span`
   width: ${({ width }) => width}px;
   height: ${({ width }) => width}px;
@@ -97,9 +105,11 @@ const Auth = () => {
       {!user && <Button {...loginButtonProperties} />}
       {user && (
         <>
-          <AvatarStyled width={24} url={user.photoURL} />
-          <span>Welcome {user.displayName}!</span>
-          <Button {...logoutButtonProperties} />
+          <AvatarStyled width={32} url={user.photoURL} />
+          <AuthGreetWrapper>Welcome {user.displayName}!</AuthGreetWrapper>
+          <ButtonWrapper>
+            <Button {...logoutButtonProperties} />
+          </ButtonWrapper>
         </>
       )}
     </AuthStyled>
