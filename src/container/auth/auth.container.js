@@ -1,7 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect } from "react";
 import Button from "../../component/button/button.component";
 import { firebase, firestore } from "../../firebase";
 import styled from "styled-components";
+import { getState, DispatchContext } from "../../redux";
+
+const ButtonWrapper = styled.div`
+  // flex-grow: 1;
+`;
+
+const AuthGreetWrapper = styled.div`
+  flex-grow: 1;
+`;
 
 const AvatarStyled = styled.span`
   width: ${({ width }) => width}px;
@@ -18,7 +27,19 @@ const AuthStyled = styled.span`
 `;
 
 const Auth = () => {
-  const [user, setUser] = useState(null);
+  const dispatch = useContext(DispatchContext);
+  const user = getState("user");
+
+  useEffect(() => {
+    const { currentUser } = firebase.auth();
+    if (currentUser) {
+      dispatch({
+        type: "UPDATE_USER",
+        payload: currentUser.providerData[0]
+      });
+    }
+  });
+
   const handleLogIn = () => {
     console.log(`Log me in now!`);
     const googleProvider = new firebase.auth.GoogleAuthProvider();
@@ -28,6 +49,8 @@ const Auth = () => {
     //   login_hint: "username@gmail.com"
     // });
 
+    // check if the user is already logged in
+
     // Launch pop-up
     firebase
       .auth()
@@ -35,7 +58,11 @@ const Auth = () => {
       .then(result => {
         console.log(`Signed in successful`, result);
         console.log(`User data`, result.user.providerData[0]);
-        setUser(result.user.providerData[0]);
+        dispatch({
+          type: "UPDATE_USER",
+          payload: result.user.providerData[0]
+        });
+        // setUser(result.user.providerData[0]);
         // Check if the user data is present in the user table
         /**
         displayName: "Marian Zburlea"
@@ -55,7 +82,10 @@ const Auth = () => {
       .signOut()
       .then(() => {
         console.info(`Sign out successful`);
-        setUser(null);
+        dispatch({
+          type: "UPDATE_USER",
+          payload: null
+        });
       })
       .catch(error => console.log(`Sign out failed!`, error));
   };
@@ -75,9 +105,11 @@ const Auth = () => {
       {!user && <Button {...loginButtonProperties} />}
       {user && (
         <>
-          <AvatarStyled width={24} url={user.photoURL} />
-          <span>Welcome {user.displayName}!</span>
-          <Button {...logoutButtonProperties} />
+          <AvatarStyled width={32} url={user.photoURL} />
+          <AuthGreetWrapper>Welcome {user.displayName}!</AuthGreetWrapper>
+          <ButtonWrapper>
+            <Button {...logoutButtonProperties} />
+          </ButtonWrapper>
         </>
       )}
     </AuthStyled>

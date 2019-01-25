@@ -8,7 +8,7 @@ import styled from "styled-components";
 import { DispatchContext, StateContext } from "./redux";
 
 const CodetapCafeWrapper = styled.div`
-  height: 100%;
+  height: calc(100% - 45px);
 `;
 
 const CodetapCafe = () => {
