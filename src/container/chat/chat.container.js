@@ -23,8 +23,6 @@ const Chat = () => {
   const messageList = getState("messageList");
   const user = getState("user");
 
-  console.log(messageList, user);
-
   useEffect(() => {
     const unsubscribe = firestore
       .collection("chat")
@@ -42,7 +40,7 @@ const Chat = () => {
               type
             };
           })
-          .filter(message => message);
+          .filter(message => message && message.time);
 
         docList.length &&
           dispatch({

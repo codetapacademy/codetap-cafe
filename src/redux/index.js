@@ -18,6 +18,18 @@ export const reducer = (state, action) => {
       action.payload.forEach(message => {
         if (message.type === "added") {
           messageList = [...messageList, message];
+        } else if (message.type === "modified") {
+          const messageExists = messageList.filter(m => message.id === m.id)
+            .length;
+          if (messageExists) {
+            // Check if it exists
+            messageList = messageList.map(m =>
+              m.id === message.id ? message : m
+            );
+          } else {
+            // or add it otherwise
+            messageList = [...messageList, message];
+          }
         } else if (message.type === "removed") {
           messageList = messageList.filter(m => m.id !== message.id);
         }
