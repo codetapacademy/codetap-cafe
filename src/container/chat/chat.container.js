@@ -85,9 +85,6 @@ const Chat = () => {
       .add({ message, updatedAt, user: { ...user } })
       .then(docRef => {
         console.log(`Success! handleSumbit()`);
-        // Object.keys(docRef),
-        // docRef.firestore,
-        // docRef.id
       })
       .catch(error => {
         console.log(`Error! handleSumbit()`, error);
@@ -128,7 +125,7 @@ const Chat = () => {
         />
       </TextAreaWrapper>
       <ButtonWrapper>
-        <Button label="Send" />
+        <Button label="Send" disabled={!currentMessage} />
       </ButtonWrapper>
     </ChatWrapper>
   );
