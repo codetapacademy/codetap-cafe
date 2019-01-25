@@ -58,7 +58,7 @@ const Chat = () => {
 
     firestore
       .collection("chat")
-      .add({ message, updatedAt, user })
+      .add({ message, updatedAt, user: Object.assign({}, user) })
       .then(docRef => {
         console.log(`Success! handleSumbit()`);
         // Object.keys(docRef),
