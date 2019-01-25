@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Button from "../../component/button/button.component";
 import { firebase, firestore } from "../../firebase";
 import styled from "styled-components";
@@ -22,6 +22,16 @@ const Auth = () => {
   const dispatch = useContext(DispatchContext);
   const user = getState("user");
 
+  useEffect(() => {
+    const { currentUser } = firebase.auth();
+    if (currentUser) {
+      dispatch({
+        type: "UPDATE_USER",
+        payload: currentUser.providerData[0]
+      });
+    }
+  });
+
   const handleLogIn = () => {
     console.log(`Log me in now!`);
     const googleProvider = new firebase.auth.GoogleAuthProvider();
@@ -30,6 +40,8 @@ const Auth = () => {
     // googleProvider.setCustomParameters({
     //   login_hint: "username@gmail.com"
     // });
+
+    // check if the user is already logged in
 
     // Launch pop-up
     firebase
