@@ -8,13 +8,35 @@ import Button from "../../component/button";
 const ChatWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 200px;
-  grid-template-rows: 1fr 100px;
+  grid-template-rows: 1fr 60px;
   height: 100%;
+  grid-gap: 5px;
+  padding: 5px;
 `;
 
 const ChatBody = styled.div`
   grid-columns: 1/2;
   grid-rows: 1/2;
+`;
+
+const ChatMessage = styled.div`
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: 120px 1fr;
+`;
+
+const ChatUser = styled.div`
+  font-weight: bold;
+`;
+
+const TextAreaWrapper = styled.div`
+  grid-column: 1/2;
+  grid-row: 2/3;
+`;
+
+const ButtonWrapper = styled.div`
+  grid-column: 2/3;
+  grid-row: 2/3;
 `;
 
 const Chat = () => {
@@ -86,18 +108,24 @@ const Chat = () => {
 
   return (
     <ChatWrapper>
-      <h1>nananan</h1>
       <ChatBody>
-        {messageList.map(({ message, id }) => (
-          <div key={id}>{message}</div>
+        {messageList.map(({ message, user, id }) => (
+          <ChatMessage key={id}>
+            <ChatUser className="chat__user">{user.displayName}:</ChatUser>
+            <div className="chat__message">{message}</div>
+          </ChatMessage>
         ))}
+      </ChatBody>
+      <TextAreaWrapper>
         <TextArea
           placeholder="Write a message"
           onKeyDown={handleOnKeyDown}
           value={currentMessage}
         />
+      </TextAreaWrapper>
+      <ButtonWrapper>
         <Button label="Send" />
-      </ChatBody>
+      </ButtonWrapper>
     </ChatWrapper>
   );
 };
