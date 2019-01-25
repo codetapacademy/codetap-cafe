@@ -15,8 +15,11 @@ const ChatWrapper = styled.div`
 `;
 
 const ChatBody = styled.div`
-  grid-columns: 1/2;
-  grid-rows: 1/2;
+  grid-column: 1/2;
+  grid-row: 1/2;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-gap: 10px;
 `;
 
 const ChatMessage = styled.div`
@@ -79,7 +82,7 @@ const Chat = () => {
 
     firestore
       .collection("chat")
-      .add({ message, updatedAt, user: Object.assign({}, user) })
+      .add({ message, updatedAt, user: { ...user } })
       .then(docRef => {
         console.log(`Success! handleSumbit()`);
         // Object.keys(docRef),
@@ -111,10 +114,10 @@ const Chat = () => {
     <ChatWrapper>
       <ChatBody>
         {messageList.map(({ message, user, id }) => (
-          <ChatMessage key={id}>
+          <React.Fragment key={id}>
             <ChatUser>{user.displayName}:</ChatUser>
             <div className="chat__message">{message}</div>
-          </ChatMessage>
+          </React.Fragment>
         ))}
       </ChatBody>
       <TextAreaWrapper>
