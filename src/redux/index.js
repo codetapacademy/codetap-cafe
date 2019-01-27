@@ -1,20 +1,24 @@
 import { createContext, useContext } from "react";
+import { UPDATE_USER } from "../container/auth/const";
 
 export const initialState = {
-  messageList: [],
+  messageList: {
+    isLoading: true,
+    data: []
+  },
   user: null
 };
 
 export const reducer = (state, action) => {
   switch (action.type) {
-    case "UPDATE_USER":
+    case UPDATE_USER:
       return {
         ...state,
         user: action.payload
       };
     case "UPDATE_LIST":
-      // debugger;
-      let messageList = [...state.messageList];
+      console.log(state);
+      let messageList = [...state.messageList.data];
       action.payload.forEach(message => {
         if (message.type === "added") {
           messageList = [...messageList, message];
@@ -34,9 +38,17 @@ export const reducer = (state, action) => {
           messageList = messageList.filter(m => m.id !== message.id);
         }
       });
+      console.log(messageList);
+      console.log({
+        data: messageList,
+        isLoading: false
+      });
       return {
         ...state,
-        messageList
+        messageList: {
+          data: messageList,
+          isLoading: false
+        }
       };
     default:
       return state;

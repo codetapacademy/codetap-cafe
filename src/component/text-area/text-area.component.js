@@ -13,11 +13,13 @@ const defaultProps = {
   placeholder: "Change me"
 };
 
-const TextArea = ({ placeholder, onKeyDown, value }) => (
+const TextArea = ({ placeholder, onChange, onKeyDown, value }) => (
   <TextAreaStyled
     placeholder={placeholder}
-    onKeyDown={onKeyDown}
-    defaultValue={value}
+    onKeyPress={onKeyDown}
+    onChange={onChange}
+    value={value}
+    autoFocus
   />
 );
 

@@ -16,6 +16,8 @@ const Auth = () => {
 
   useEffect(() => {
     const { currentUser } = firebase.auth();
+    console.log(firebase);
+    console.log(firebase.auth());
 
     // check if the user is already logged in
     if (currentUser) {
@@ -38,11 +40,8 @@ const Auth = () => {
       .signInWithPopup(googleProvider)
       .then(result => {
         console.log(`Signed in successful`, result);
+        dispatch(updateUser(result.user.providerData[0]));
         console.log(`User data`, result.user.providerData[0]);
-        dispatch({
-          type: "UPDATE_USER",
-          payload: result.user.providerData[0]
-        });
         // const userRef = firestore.collection("user");
       });
   };
@@ -53,10 +52,7 @@ const Auth = () => {
       .signOut()
       .then(() => {
         console.info(`Sign out successful`);
-        dispatch({
-          type: "UPDATE_USER",
-          payload: null
-        });
+        dispatch(updateUser(null));
       })
       .catch(error => console.log(`Sign out failed!`, error));
   };

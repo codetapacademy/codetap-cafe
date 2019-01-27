@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { getState, DispatchContext } from "../../redux";
 
 const useFirestoreQuery = ref => {
   const [messageList, setMessageList] = useState({
     isLoading: true,
     data: []
   });
+  const dispatch = useContext(DispatchContext);
 
   useEffect(
     () =>
@@ -23,6 +25,12 @@ const useFirestoreQuery = ref => {
             };
           })
           .filter(message => message && message.time);
+
+        docList.length &&
+          dispatch({
+            type: "UPDATE_LIST",
+            payload: docList
+          });
 
         setMessageList({
           isLoading: false,
