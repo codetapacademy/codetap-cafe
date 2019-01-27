@@ -1,43 +1,29 @@
 import React, { useContext, useEffect } from "react";
 import Button from "../../component/button/button.component";
-import { firebase, firestore } from "../../firebase";
-import styled from "styled-components";
+import { firebase } from "../../firebase";
 import { getState, DispatchContext } from "../../redux";
-
-const ButtonWrapper = styled.div`
-  // flex-grow: 1;
-`;
-
-const AuthGreetWrapper = styled.div`
-  flex-grow: 1;
-`;
-
-const AvatarStyled = styled.span`
-  width: ${({ width }) => width}px;
-  height: ${({ width }) => width}px;
-  border-radius: 50%;
-  background-size: cover;
-  margin-right: 1rem;
-  background-image: url(${({ url }) => url});
-`;
-
-const AuthStyled = styled.span`
-  display: flex;
-  align-items: center;
-`;
+import { updateUser } from "./action";
+import {
+  AuthStyled,
+  AuthGreetWrapper,
+  AvatarStyled,
+  ButtonWrapper
+} from "./auth.style";
 
 const Auth = () => {
   const dispatch = useContext(DispatchContext);
   const user = getState("user");
 
   useEffect(() => {
-    const { currentUser } = firebase.auth();
-    if (currentUser) {
-      dispatch({
-        type: "UPDATE_USER",
-        payload: currentUser.providerData[0]
-      });
-    }
+    // check if the user is already logged in
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        // User is signed in.
+        dispatch(updateUser(user.providerData[0]));
+      } else {
+        // No user is signed in.
+      }
+    });
   }, []);
 
   const handleLogIn = () => {
@@ -49,30 +35,15 @@ const Auth = () => {
     //   login_hint: "username@gmail.com"
     // });
 
-    // check if the user is already logged in
-
     // Launch pop-up
     firebase
       .auth()
       .signInWithPopup(googleProvider)
       .then(result => {
         console.log(`Signed in successful`, result);
+        dispatch(updateUser(result.user.providerData[0]));
         console.log(`User data`, result.user.providerData[0]);
-        dispatch({
-          type: "UPDATE_USER",
-          payload: result.user.providerData[0]
-        });
-        // setUser(result.user.providerData[0]);
-        // Check if the user data is present in the user table
-        /**
-        displayName: "Marian Zburlea"
-        email: "marianzburlea@gmail.com"
-        phoneNumber: null
-        photoURL: "https://lh4.googleusercontent.com/-nqIDGYToMvU/AAAAAAAAAAI/AAAAAAAAAAA/AKxrwcaf1XNC-Vej9eUYOImQdzAPJZ9nVA/mo/photo.jpg"
-        providerId: "google.com"
-        uid: "101400782503323587526"
-         */
-        const userRef = firestore.collection("user");
+        // const userRef = firestore.collection("user");
       });
   };
 
@@ -82,10 +53,7 @@ const Auth = () => {
       .signOut()
       .then(() => {
         console.info(`Sign out successful`);
-        dispatch({
-          type: "UPDATE_USER",
-          payload: null
-        });
+        dispatch(updateUser(null));
       })
       .catch(error => console.log(`Sign out failed!`, error));
   };
