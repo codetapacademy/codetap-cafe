@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import TextArea from "../../component/text-area";
 import { firebase, firestore } from "../../firebase";
 import { getState, DispatchContext } from "../../redux";
 import Button from "../../component/button";
+import useFirestoreQuery from "./chat.service";
 import {
   ChatWrapper,
   ChatBody,
@@ -14,36 +15,11 @@ import {
 const Chat = () => {
   const [currentMessage, setCurrentMessage] = useState("");
   const dispatch = useContext(DispatchContext);
-  const messageList = getState("messageList");
+  // const messageList = getState("messageList");
   const user = getState("user");
 
-  useEffect(() => {
-    const unsubscribe = firestore
-      .collection("chat")
-      .orderBy("updatedAt")
-      .onSnapshot(snapshot => {
-        const docList = snapshot
-          .docChanges()
-          .map(({ type, doc }) => {
-            const { message, updatedAt, user } = doc.data();
-            return {
-              message,
-              time: (updatedAt && updatedAt.seconds) || 0,
-              id: doc.id,
-              user,
-              type
-            };
-          })
-          .filter(message => message && message.time);
-
-        docList.length &&
-          dispatch({
-            type: "UPDATE_LIST",
-            payload: docList
-          });
-      });
-    return unsubscribe;
-  }, []);
+  const ref = firestore.collection("chat").orderBy("updatedAt");
+  const { isLoading, data } = useFirestoreQuery(ref);
 
   const handleSubmit = message => {
     const updatedAt = firebase.firestore.FieldValue.serverTimestamp();
@@ -71,16 +47,17 @@ const Chat = () => {
       e.preventDefault();
     }
 
-    const { value } = e.currentTarget;
-    setCurrentMessage(value);
+    // const { value } = e.currentTarget;
+    // setCurrentMessage(value);
   };
 
+  console.log(`Just before render of Chat`);
   return (
     <ChatWrapper>
       <ChatBody>
-        {messageList.map(({ message, user, id }) => (
+        {data.map(({ message, user, id }) => (
           <React.Fragment key={id}>
-            <ChatUser>{user.displayName}:</ChatUser>
+            <ChatUser>{user.displayName}</ChatUser>
             <div className="chat__message">{message}</div>
           </React.Fragment>
         ))}
