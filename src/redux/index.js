@@ -17,7 +17,6 @@ export const reducer = (state, action) => {
         user: action.payload
       };
     case "UPDATE_LIST":
-      console.log(state);
       let messageList = [...state.messageList.data];
       action.payload.forEach(message => {
         if (message.type === "added") {
@@ -38,11 +37,7 @@ export const reducer = (state, action) => {
           messageList = messageList.filter(m => m.id !== message.id);
         }
       });
-      console.log(messageList);
-      console.log({
-        data: messageList,
-        isLoading: false
-      });
+
       return {
         ...state,
         messageList: {

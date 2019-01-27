@@ -31,25 +31,20 @@ const Chat = () => {
   const handleSubmit = message => {
     const updatedAt = firebase.firestore.FieldValue.serverTimestamp();
 
-    firestore
-      .collection("chat")
-      .add({ message, updatedAt, user: { ...user } })
-      .then(docRef => {
-        console.log(`Success! handleSumbit()`);
-      })
-      .catch(error => {
-        console.log(`Error! handleSumbit()`, error);
-      });
+    firestore.collection("chat").add({ message, updatedAt, user: { ...user } });
+    // .then(docRef => {
+    //   console.log(`Success! handleSumbit()`);
+    // })
+    // .catch(error => {
+    //   console.log(`Error! handleSumbit()`, error);
+    // });
   };
 
   const handleKeyDown = e => {
-    console.log(e);
     if (e.shiftKey && e.key === "Enter") {
       // let the user continue to write on a new line
-      console.log(`DON'T Send the message :)`);
     } else if (!e.shiftKey && e.key === "Enter") {
       // send the message away! yeeey
-      console.log(`Send the message`);
       handleSubmit(e.target.value.trim());
       setCurrentMessage("");
       e.preventDefault();
@@ -62,14 +57,14 @@ const Chat = () => {
   };
 
   if (autoScroll.current) {
-    autoScroll.current.scrollTop = autoScroll.current.clientHeight;
+    autoScroll.current.scrollTop = autoScroll.current.firstChild.clientHeight;
   }
 
-  console.log(`Just before render of Chat`);
+  // console.log(`Just before render of Chat`);
   return (
     <ChatWrapper>
-      <ChatBodyWrapper ref={autoScroll}>
-        <ChatBody>
+      <ChatBodyWrapper className="ChatBodyWrapper" ref={autoScroll}>
+        <ChatBody className="ChatBody">
           {messageList.data.map(({ message, user, id }) => (
             <React.Fragment key={id}>
               <ChatUser>{user.displayName}</ChatUser>

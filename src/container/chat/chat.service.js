@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import { getState, DispatchContext } from "../../redux";
+import { DispatchContext } from "../../redux";
 
 const useFirestoreQuery = ref => {
   const [messageList, setMessageList] = useState({
@@ -11,7 +11,6 @@ const useFirestoreQuery = ref => {
   useEffect(
     () =>
       ref.onSnapshot(snapshot => {
-        console.log(`ref.onSnapshot`);
         const docList = snapshot
           .docChanges()
           .map(({ type, doc }) => {

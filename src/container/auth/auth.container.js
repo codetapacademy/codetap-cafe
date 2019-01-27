@@ -15,14 +15,15 @@ const Auth = () => {
   const user = getState("user");
 
   useEffect(() => {
-    const { currentUser } = firebase.auth();
-    console.log(firebase);
-    console.log(firebase.auth());
-
     // check if the user is already logged in
-    if (currentUser) {
-      dispatch(updateUser(currentUser.providerData[0]));
-    }
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        // User is signed in.
+        dispatch(updateUser(user.providerData[0]));
+      } else {
+        // No user is signed in.
+      }
+    });
   }, []);
 
   const handleLogIn = () => {
