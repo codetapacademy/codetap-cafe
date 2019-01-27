@@ -1,15 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { DispatchContext } from "../../redux";
 
 const useFirestoreQuery = ref => {
   const [messageList, setMessageList] = useState({
     isLoading: true,
     data: []
   });
+  const dispatch = useContext(DispatchContext);
 
   useEffect(
     () =>
       ref.onSnapshot(snapshot => {
-        console.log(`ref.onSnapshot`);
         const docList = snapshot
           .docChanges()
           .map(({ type, doc }) => {
@@ -23,6 +24,12 @@ const useFirestoreQuery = ref => {
             };
           })
           .filter(message => message && message.time);
+
+        docList.length &&
+          dispatch({
+            type: "UPDATE_LIST",
+            payload: docList
+          });
 
         setMessageList({
           isLoading: false,

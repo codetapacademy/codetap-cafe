@@ -1,22 +1,30 @@
 import React from "react";
-import styled from "styled-components";
+import PropTypes from "prop-types";
+import { TextAreaStyled } from "./text-area.style";
 
-const TextAreaStyled = styled.textarea`
-  width: 100%;
-  height: 100%;
-  padding: 10px;
-`;
+const propTypes = {
+  placeholder: PropTypes.string,
+  value: PropTypes.string,
+  onKeyDown: PropTypes.func,
+  onChange: PropTypes.func
+};
 
-const TextArea = ({ placeholder, onKeyDown, value }) => (
-  <TextAreaStyled
-    placeholder={placeholder}
-    onKeyDown={onKeyDown}
-    defaultValue={value}
-  />
-);
-
-TextArea.defaultProps = {
+const defaultProps = {
   value: "",
   placeholder: "Change me"
 };
+
+const TextArea = ({ placeholder, onChange, onKeyDown, value }) => (
+  <TextAreaStyled
+    placeholder={placeholder}
+    onKeyPress={onKeyDown}
+    onChange={onChange}
+    value={value}
+    autoFocus
+  />
+);
+
+TextArea.defaultProps = defaultProps;
+TextArea.propTypes = propTypes;
+
 export default TextArea;
