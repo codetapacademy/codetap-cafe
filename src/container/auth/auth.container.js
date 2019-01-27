@@ -1,31 +1,14 @@
 import React, { useContext, useEffect } from "react";
 import Button from "../../component/button/button.component";
-import { firebase, firestore } from "../../firebase";
-import styled from "styled-components";
+import { firebase } from "../../firebase";
 import { getState, DispatchContext } from "../../redux";
 import { updateUser } from "./action";
-
-const ButtonWrapper = styled.div`
-  // flex-grow: 1;
-`;
-
-const AuthGreetWrapper = styled.div`
-  flex-grow: 1;
-`;
-
-const AvatarStyled = styled.span`
-  width: ${({ width }) => width}px;
-  height: ${({ width }) => width}px;
-  border-radius: 50%;
-  background-size: cover;
-  margin-right: 1rem;
-  background-image: url(${({ url }) => url});
-`;
-
-const AuthStyled = styled.span`
-  display: flex;
-  align-items: center;
-`;
+import {
+  AuthStyled,
+  AuthGreetWrapper,
+  AvatarStyled,
+  ButtonWrapper
+} from "./auth.style";
 
 const Auth = () => {
   const dispatch = useContext(DispatchContext);
@@ -60,7 +43,7 @@ const Auth = () => {
           type: "UPDATE_USER",
           payload: result.user.providerData[0]
         });
-        const userRef = firestore.collection("user");
+        // const userRef = firestore.collection("user");
       });
   };
 
