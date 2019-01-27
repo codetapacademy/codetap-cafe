@@ -3,6 +3,7 @@ import Button from "../../component/button/button.component";
 import { firebase, firestore } from "../../firebase";
 import styled from "styled-components";
 import { getState, DispatchContext } from "../../redux";
+import { updateUser } from "./action";
 
 const ButtonWrapper = styled.div`
   // flex-grow: 1;
@@ -32,11 +33,10 @@ const Auth = () => {
 
   useEffect(() => {
     const { currentUser } = firebase.auth();
+
+    // check if the user is already logged in
     if (currentUser) {
-      dispatch({
-        type: "UPDATE_USER",
-        payload: currentUser.providerData[0]
-      });
+      dispatch(updateUser(currentUser.providerData[0]));
     }
   }, []);
 
@@ -49,8 +49,6 @@ const Auth = () => {
     //   login_hint: "username@gmail.com"
     // });
 
-    // check if the user is already logged in
-
     // Launch pop-up
     firebase
       .auth()
@@ -62,16 +60,6 @@ const Auth = () => {
           type: "UPDATE_USER",
           payload: result.user.providerData[0]
         });
-        // setUser(result.user.providerData[0]);
-        // Check if the user data is present in the user table
-        /**
-        displayName: "Marian Zburlea"
-        email: "marianzburlea@gmail.com"
-        phoneNumber: null
-        photoURL: "https://lh4.googleusercontent.com/-nqIDGYToMvU/AAAAAAAAAAI/AAAAAAAAAAA/AKxrwcaf1XNC-Vej9eUYOImQdzAPJZ9nVA/mo/photo.jpg"
-        providerId: "google.com"
-        uid: "101400782503323587526"
-         */
         const userRef = firestore.collection("user");
       });
   };
