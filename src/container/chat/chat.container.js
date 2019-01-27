@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import TextArea from "../../component/text-area";
 import { firebase, firestore } from "../../firebase";
 import { getState } from "../../redux";
@@ -18,6 +18,7 @@ const Chat = () => {
   // const currentMessage = "";
   const messageList = getState("messageList");
   const user = getState("user");
+  const autoScroll = useRef();
 
   const ref = firestore.collection("chat").orderBy("updatedAt");
   useFirestoreQuery(ref);
@@ -60,10 +61,14 @@ const Chat = () => {
     setCurrentMessage(value);
   };
 
+  if (autoScroll.current) {
+    autoScroll.current.scrollTop = autoScroll.current.clientHeight;
+  }
+
   console.log(`Just before render of Chat`);
   return (
     <ChatWrapper>
-      <ChatBodyWrapper>
+      <ChatBodyWrapper ref={autoScroll}>
         <ChatBody>
           {messageList.data.map(({ message, user, id }) => (
             <React.Fragment key={id}>
