@@ -18,9 +18,7 @@ const CodetapCafe = () => {
     <DispatchContext.Provider value={dispatch}>
       <StateContext.Provider value={state}>
         <CodetapCafeWrapper className="codetap-cafe">
-          <div>
-            <Auth />
-          </div>
+          <Auth />
           <Chat />
         </CodetapCafeWrapper>
       </StateContext.Provider>

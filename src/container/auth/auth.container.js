@@ -38,7 +38,7 @@ const Auth = () => {
         payload: currentUser.providerData[0]
       });
     }
-  });
+  }, []);
 
   const handleLogIn = () => {
     console.log(`Log me in now!`);
