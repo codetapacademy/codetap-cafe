@@ -15,6 +15,12 @@ const ChatBody = styled.div`
   display: grid;
   grid-template-columns: auto 1fr;
   grid-gap: 10px;
+  align-items: end;
+`;
+
+const ChatBodyWrapper = styled.div`
+  display: flex;
+  align-items: flex-end;
 `;
 
 const ChatUser = styled.div`
@@ -32,4 +38,11 @@ const ButtonWrapper = styled.div`
   grid-row: 2/3;
 `;
 
-export { ChatWrapper, ChatBody, ChatUser, TextAreaWrapper, ButtonWrapper };
+export {
+  ChatWrapper,
+  ChatBody,
+  ChatUser,
+  TextAreaWrapper,
+  ButtonWrapper,
+  ChatBodyWrapper
+};

@@ -9,7 +9,8 @@ import {
   ChatBody,
   ChatUser,
   TextAreaWrapper,
-  ButtonWrapper
+  ButtonWrapper,
+  ChatBodyWrapper
 } from "./chat.style";
 
 const Chat = () => {
@@ -62,14 +63,16 @@ const Chat = () => {
   console.log(`Just before render of Chat`);
   return (
     <ChatWrapper>
-      <ChatBody>
-        {messageList.data.map(({ message, user, id }) => (
-          <React.Fragment key={id}>
-            <ChatUser>{user.displayName}</ChatUser>
-            <div className="chat__message">{message}</div>
-          </React.Fragment>
-        ))}
-      </ChatBody>
+      <ChatBodyWrapper>
+        <ChatBody>
+          {messageList.data.map(({ message, user, id }) => (
+            <React.Fragment key={id}>
+              <ChatUser>{user.displayName}</ChatUser>
+              <div className="chat__message">{message}</div>
+            </React.Fragment>
+          ))}
+        </ChatBody>
+      </ChatBodyWrapper>
       <TextAreaWrapper>
         <TextArea
           placeholder="Write a message"
