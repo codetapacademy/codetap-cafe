@@ -19,6 +19,7 @@ const ChatBody = styled.div`
 
 const ChatBodyWrapper = styled.div`
   overflow-y: scroll;
+  grid-column: 1/3;
 `;
 // display: flex;
 // align-items: flex-end;
