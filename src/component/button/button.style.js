@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const ButtonStyle = styled.button`
-  color: #108fdf;
+  color: ${({color = 'fff'}) => `#${color}`};
   font-weight: bold;
   padding: 10px 25px;
   width: 100%;
