@@ -23,8 +23,8 @@ const defaultProps = {
   label: "Change me"
 };
 
-const Button = ({ label, onClick, disabled }) => (
-  <ButtonStyle onClick={onClick} disabled={disabled}>
+const Button = ({ label, onClick, disabled, color }) => (
+  <ButtonStyle color={color} onClick={onClick} disabled={disabled}>
     {label}
   </ButtonStyle>
 );

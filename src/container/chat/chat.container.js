@@ -84,6 +84,7 @@ const Chat = () => {
       <ButtonWrapper>
         <Button
           label="Send"
+          color="c00"
           disabled={!currentMessage}
           onClick={handleButtonSubmit}
         />
