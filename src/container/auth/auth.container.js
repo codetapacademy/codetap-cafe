@@ -1,6 +1,6 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Button from "../../component/button/button.component";
-import { firebase } from "../../firebase";
+import { firebase, firestore, database } from "../../firebase";
 import { getState, DispatchContext } from "../../redux";
 import { updateUser } from "./action";
 import {
@@ -13,13 +13,29 @@ import {
 const Auth = () => {
   const dispatch = useContext(DispatchContext);
   const user = getState("user");
+  const [uid, setUid] = useState()
 
   useEffect(() => {
     // check if the user is already logged in
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         // User is signed in.
-        dispatch(updateUser(user.providerData[0]));
+        const userInfo = user.providerData[0];
+        const { uid } = userInfo;
+        setUid(uid)
+        dispatch(updateUser(userInfo));
+        
+        const onlineRef = database.ref('.info/connected');
+
+        onlineRef.on('value', snap => {
+          database.ref(`/status/${uid}`)
+            .onDisconnect()
+            .set('offline')
+            .then(() => {
+              database.ref(`/status/${uid}`).set('online');
+            })
+        })
+
       } else {
         // No user is signed in.
       }
@@ -48,6 +64,8 @@ const Auth = () => {
   };
 
   const handleLogOut = () => {
+    database.ref(`/status/${uid}`).set('offline');
+    setUid(null);
     firebase
       .auth()
       .signOut()
