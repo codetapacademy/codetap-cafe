@@ -13,10 +13,10 @@ import {
 const Auth = () => {
   const dispatch = useContext(DispatchContext);
   const user = getState("user");
-  const [uid, setUid] = useState()
-  
-  const onlineRef = database.ref('.info/connected');
-  const userRef = firestore.collection('user');
+  const [uid, setUid] = useState();
+
+  const onlineRef = database.ref(".info/connected");
+  const userRef = firestore.collection("user");
 
   useEffect(() => {
     // check if the user is already logged in
@@ -25,24 +25,24 @@ const Auth = () => {
         // User is signed in.
         const userInfo = user.providerData[0];
         const { uid } = userInfo;
-        setUid(uid)
+        setUid(uid);
         dispatch(updateUser(userInfo));
-        
 
-        onlineRef.on('value', snap => {
-          database.ref(`/status/${uid}`)
+        onlineRef.on("value", snap => {
+          database
+            .ref(`/status/${uid}`)
             .onDisconnect()
-            .set('offline')
+            .set("offline")
             .then(() => {
-              database.ref(`/status/${uid}`).set('online');
-              userRef
-                .doc(uid)
-                .set({
+              database.ref(`/status/${uid}`).set("online");
+              userRef.doc(uid).set(
+                {
                   online: true
-                }, { merge: true });
-            })
-        })
-
+                },
+                { merge: true }
+              );
+            });
+        });
       } else {
         // No user is signed in.
       }
@@ -65,16 +65,24 @@ const Auth = () => {
       .then(result => {
         const user = result.user.providerData[0];
         console.log(`Signed in successful`, result);
-        debugger
         dispatch(updateUser(user));
 
         console.log(`User data`, user);
-        userRef.doc(user.uid).set({...user}, {merge: true});
+        userRef.doc(user.uid).set({ ...user }, { merge: true });
+
+        /**
+         * This was used to genertate the tables for member and admin
+         *  a log in and log out was done to add users to the tables
+         */
+        // firestore
+        //   .collection("member")
+        //   .doc(user.uid)
+        //   .set({ ...user }, { merge: true });
       });
   };
 
   const handleLogOut = () => {
-    database.ref(`/status/${uid}`).set('offline');
+    database.ref(`/status/${uid}`).set("offline");
 
     setUid(null);
     firebase
