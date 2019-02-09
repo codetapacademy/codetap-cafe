@@ -20,8 +20,9 @@ const Chat = () => {
   const user = getState("user");
   const autoScroll = useRef();
 
-  const ref = firestore.collection("chat").orderBy("updatedAt");
-  useFirestoreQuery(ref);
+  const refChat = firestore.collection("chat").orderBy("updatedAt");
+  const refMember = firestore.collection("member");
+  useFirestoreQuery(refChat, refMember);
 
   const handleButtonSubmit = () => {
     handleSubmit(currentMessage.trim());
