@@ -13,7 +13,9 @@ import {
   ChatBodyWrapper,
   ChatMemberList,
   ChatMemberAvatar,
-  ChatMember
+  ChatMember,
+  ChatMemberWrapper,
+  ChatMemberName
 } from "./chat.style";
 
 const Chat = () => {
@@ -80,11 +82,13 @@ const Chat = () => {
         </ChatBody>
         <ChatMemberList>
           {memberList.data.map(({ id, photoURL, displayName }) => (
-            <ChatMember key={+id}>
-              <ChatMemberAvatar photoURL={photoURL} />
-              {displayName}
-              <div>🗨</div>
-            </ChatMember>
+            <ChatMemberWrapper>
+              <ChatMember key={+id}>
+                <ChatMemberAvatar photoURL={photoURL} />
+                <ChatMemberName>{displayName}</ChatMemberName>
+                <div>🗨</div>
+              </ChatMember>
+            </ChatMemberWrapper>
           ))}
         </ChatMemberList>
       </ChatBodyWrapper>

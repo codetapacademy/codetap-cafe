@@ -21,6 +21,7 @@ export const ChatBodyWrapper = styled.div`
   overflow-y: scroll;
   grid-column: 1/3;
   position: relative;
+  overflow: hidden;
 `;
 
 export const ChatMemberAvatar = styled.div`
@@ -32,12 +33,28 @@ export const ChatMemberAvatar = styled.div`
   background-image: url(${({ photoURL }) => photoURL});
 `;
 
+export const ChatMemberWrapper = styled.div`
+  height: 64px;
+  position: relative;
+`;
+
 export const ChatMember = styled.div`
+  &:hover {
+    left: -200px;
+  }
+  cursor: pointer;
+  transition: 0.2s;
+  left: -60px;
+  position: absolute;
   display: grid;
   grid-template-columns: 64px 1fr 64px;
   grid-gap: 5px;
   align-items: center;
   justify-content: center;
+`;
+
+export const ChatMemberName = styled.div`
+  white-space: nowrap;
 `;
 
 export const ChatMemberList = styled.div`
