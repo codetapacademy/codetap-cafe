@@ -25,10 +25,19 @@ export const ChatBodyWrapper = styled.div`
 
 export const ChatMemberAvatar = styled.div`
   background-size: cover;
-  width: 64px;
-  height: 64px;
+  width: 48px;
+  height: 48px;
   margin: 5px;
   border-radius: 50%;
+  background-image: url(${({ photoURL }) => photoURL});
+`;
+
+export const ChatMember = styled.div`
+  display: grid;
+  grid-template-columns: 64px 1fr 64px;
+  grid-gap: 5px;
+  align-items: center;
+  justify-content: center;
 `;
 
 export const ChatMemberList = styled.div`

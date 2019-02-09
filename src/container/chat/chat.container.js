@@ -12,7 +12,8 @@ import {
   ButtonWrapper,
   ChatBodyWrapper,
   ChatMemberList,
-  ChatMemberAvatar
+  ChatMemberAvatar,
+  ChatMember
 } from "./chat.style";
 
 const Chat = () => {
@@ -78,12 +79,12 @@ const Chat = () => {
           ))}
         </ChatBody>
         <ChatMemberList>
-          {memberList.data.map(({ id, photoURL }) => (
-            <div key={+id}>
-              <ChatMemberAvatar
-                style={{ backgroundImage: `url(${photoURL})` }}
-              />
-            </div>
+          {memberList.data.map(({ id, photoURL, displayName }) => (
+            <ChatMember key={+id}>
+              <ChatMemberAvatar photoURL={photoURL} />
+              {displayName}
+              <div>🗨</div>
+            </ChatMember>
           ))}
         </ChatMemberList>
       </ChatBodyWrapper>
