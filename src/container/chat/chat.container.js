@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, Fragment } from "react";
 import TextArea from "../../component/text-area";
 import { firebase, firestore } from "../../firebase";
 import { getState } from "../../redux";
@@ -10,18 +10,26 @@ import {
   ChatUser,
   TextAreaWrapper,
   ButtonWrapper,
-  ChatBodyWrapper
+  ChatBodyWrapper,
+  ChatMemberList,
+  ChatMemberAvatar,
+  ChatMember,
+  ChatMemberWrapper,
+  ChatMemberName
 } from "./chat.style";
 
 const Chat = () => {
   const [currentMessage, setCurrentMessage] = useState("");
   // const currentMessage = "";
   const messageList = getState("messageList");
+  const memberList = getState("memberList");
   const user = getState("user");
+
   const autoScroll = useRef();
 
-  const ref = firestore.collection("chat").orderBy("updatedAt");
-  useFirestoreQuery(ref);
+  const refChat = firestore.collection("chat").orderBy("updatedAt");
+  const refMember = firestore.collection("member");
+  useFirestoreQuery(refChat, refMember);
 
   const handleButtonSubmit = () => {
     handleSubmit(currentMessage.trim());
@@ -66,12 +74,23 @@ const Chat = () => {
       <ChatBodyWrapper className="ChatBodyWrapper" ref={autoScroll}>
         <ChatBody className="ChatBody">
           {messageList.data.map(({ message, user, id }) => (
-            <React.Fragment key={id}>
+            <Fragment key={id}>
               <ChatUser>{user.displayName}</ChatUser>
               <div className="chat__message">{message}</div>
-            </React.Fragment>
+            </Fragment>
           ))}
         </ChatBody>
+        <ChatMemberList>
+          {memberList.data.map(({ id, photoURL, displayName }) => (
+            <ChatMemberWrapper>
+              <ChatMember key={+id}>
+                <ChatMemberAvatar photoURL={photoURL} />
+                <ChatMemberName>{displayName}</ChatMemberName>
+                <div>🗨</div>
+              </ChatMember>
+            </ChatMemberWrapper>
+          ))}
+        </ChatMemberList>
       </ChatBodyWrapper>
       <TextAreaWrapper>
         <TextArea
