@@ -1,0 +1,1 @@
+export const UPDATE_MEMBER_LIST = "chat.UPDATE_MEMBER_LIST";

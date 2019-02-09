@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const ChatWrapper = styled.div`
+export const ChatWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 200px;
   grid-template-rows: 1fr 60px;
@@ -9,7 +9,7 @@ const ChatWrapper = styled.div`
   padding: 5px;
 `;
 
-const ChatBody = styled.div`
+export const ChatBody = styled.div`
   grid-column: 1/2;
   grid-row: 1/2;
   display: grid;
@@ -17,33 +17,39 @@ const ChatBody = styled.div`
   grid-gap: 10px;
 `;
 
-const ChatBodyWrapper = styled.div`
+export const ChatBodyWrapper = styled.div`
   overflow-y: scroll;
   grid-column: 1/3;
+  position: relative;
+`;
+
+export const ChatMemberAvatar = styled.div`
+  background-size: cover;
+  width: 64px;
+  height: 64px;
+  margin: 5px;
+  border-radius: 50%;
+`;
+
+export const ChatMemberList = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
 `;
 // display: flex;
 // align-items: flex-end;
 
-const ChatUser = styled.div`
+export const ChatUser = styled.div`
   font-weight: bold;
   white-space: nowrap;
 `;
 
-const TextAreaWrapper = styled.div`
+export const TextAreaWrapper = styled.div`
   grid-column: 1/2;
   grid-row: 2/3;
 `;
 
-const ButtonWrapper = styled.div`
+export const ButtonWrapper = styled.div`
   grid-column: 2/3;
   grid-row: 2/3;
 `;
-
-export {
-  ChatWrapper,
-  ChatBody,
-  ChatUser,
-  TextAreaWrapper,
-  ButtonWrapper,
-  ChatBodyWrapper
-};

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, Fragment } from "react";
 import TextArea from "../../component/text-area";
 import { firebase, firestore } from "../../firebase";
 import { getState } from "../../redux";
@@ -10,14 +10,18 @@ import {
   ChatUser,
   TextAreaWrapper,
   ButtonWrapper,
-  ChatBodyWrapper
+  ChatBodyWrapper,
+  ChatMemberList,
+  ChatMemberAvatar
 } from "./chat.style";
 
 const Chat = () => {
   const [currentMessage, setCurrentMessage] = useState("");
   // const currentMessage = "";
   const messageList = getState("messageList");
+  const memberList = getState("memberList");
   const user = getState("user");
+
   const autoScroll = useRef();
 
   const refChat = firestore.collection("chat").orderBy("updatedAt");
@@ -67,12 +71,21 @@ const Chat = () => {
       <ChatBodyWrapper className="ChatBodyWrapper" ref={autoScroll}>
         <ChatBody className="ChatBody">
           {messageList.data.map(({ message, user, id }) => (
-            <React.Fragment key={id}>
+            <Fragment key={id}>
               <ChatUser>{user.displayName}</ChatUser>
               <div className="chat__message">{message}</div>
-            </React.Fragment>
+            </Fragment>
           ))}
         </ChatBody>
+        <ChatMemberList>
+          {memberList.data.map(({ id, photoURL }) => (
+            <div key={+id}>
+              <ChatMemberAvatar
+                style={{ backgroundImage: `url(${photoURL})` }}
+              />
+            </div>
+          ))}
+        </ChatMemberList>
       </ChatBodyWrapper>
       <TextAreaWrapper>
         <TextArea

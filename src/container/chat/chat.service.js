@@ -1,8 +1,14 @@
 import { useEffect, useState, useContext } from "react";
 import { DispatchContext } from "../../redux";
+import { UPDATE_LIST } from "../auth/const";
+import { UPDATE_MEMBER_LIST } from "./const";
 
 const useFirestoreQuery = (refChat, refMember) => {
   const [messageList, setMessageList] = useState({
+    isLoading: true,
+    data: []
+  });
+  const [memberList, setMemberList] = useState({
     isLoading: true,
     data: []
   });
@@ -10,7 +16,7 @@ const useFirestoreQuery = (refChat, refMember) => {
 
   useEffect(() => {
     refChat.onSnapshot(snapshot => {
-      const docList = snapshot
+      const messageList = snapshot
         .docChanges()
         .map(({ type, doc }) => {
           const { message, updatedAt, user } = doc.data();
@@ -24,26 +30,35 @@ const useFirestoreQuery = (refChat, refMember) => {
         })
         .filter(message => message && message.time);
 
-      docList.length &&
+      messageList.length &&
         dispatch({
-          type: "UPDATE_LIST",
-          payload: docList
+          type: UPDATE_LIST,
+          payload: messageList
         });
 
       setMessageList({
         isLoading: false,
-        data: docList
+        data: messageList
       });
     });
     refMember.onSnapshot(snapshot => {
-      snapshot.docChanges().map(({ type, doc }) => {
-        return console.log(doc.data(), type);
+      const memberList = snapshot
+        .docChanges()
+        .map(({ type, doc }) => ({ ...doc.data(), id: doc.id }));
+      memberList.length &&
+        dispatch({
+          type: UPDATE_MEMBER_LIST,
+          payload: memberList
+        });
+
+      setMemberList({
+        isLoading: false,
+        data: memberList
       });
     });
-    const a = 2;
   }, []);
 
-  return messageList;
+  return { messageList, memberList };
 };
 
 export default useFirestoreQuery;

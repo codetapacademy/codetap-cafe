@@ -1,10 +1,15 @@
 import { createContext, useContext } from "react";
-import { UPDATE_USER } from "../container/auth/const";
+import { UPDATE_USER, UPDATE_LIST } from "../container/auth/const";
+import { UPDATE_MEMBER_LIST } from "../container/chat/const";
 
 export const initialState = {
   messageList: {
     isLoading: true,
     data: []
+  },
+  memberList: {
+    isLoading: false,
+    data: [{ photoUrl: "2312312" }]
   },
   user: null
 };
@@ -16,7 +21,16 @@ export const reducer = (state, action) => {
         ...state,
         user: action.payload
       };
-    case "UPDATE_LIST":
+
+    case UPDATE_MEMBER_LIST:
+      return {
+        ...state,
+        memberList: {
+          data: action.payload
+        }
+      };
+
+    case UPDATE_LIST:
       let messageList = [...state.messageList.data];
       action.payload.forEach(message => {
         if (message.type === "added") {
