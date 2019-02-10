@@ -17,6 +17,7 @@ const Auth = () => {
 
   const onlineRef = database.ref(".info/connected");
   const userRef = firestore.collection("user");
+  const memberRef = firestore.collection("member");
 
   useEffect(() => {
     // check if the user is already logged in
@@ -35,9 +36,9 @@ const Auth = () => {
             .set("offline")
             .then(() => {
               database.ref(`/status/${uid}`).set("online");
-              userRef.doc(uid).set(
+              memberRef.doc(uid).set(
                 {
-                  online: true
+                  status: true
                 },
                 { merge: true }
               );

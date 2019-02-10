@@ -1,6 +1,9 @@
 import { createContext, useContext } from "react";
 import { UPDATE_USER, UPDATE_LIST } from "../container/auth/const";
-import { UPDATE_MEMBER_LIST } from "../container/chat/const";
+import {
+  UPDATE_MEMBER_LIST,
+  UPDATE_MEMBER_STATUS
+} from "../container/chat/const";
 
 export const initialState = {
   messageList: {
@@ -9,7 +12,7 @@ export const initialState = {
   },
   memberList: {
     isLoading: false,
-    data: [{ photoUrl: "2312312" }]
+    data: []
   },
   user: null
 };
@@ -20,6 +23,13 @@ export const reducer = (state, action) => {
       return {
         ...state,
         user: action.payload
+      };
+
+    case UPDATE_MEMBER_STATUS:
+      console.log(action.payload);
+      console.log(state.memberList);
+      return {
+        ...state
       };
 
     case UPDATE_MEMBER_LIST:
