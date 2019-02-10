@@ -26,10 +26,14 @@ export const reducer = (state, action) => {
       };
 
     case UPDATE_MEMBER_STATUS:
-      console.log(action.payload);
-      console.log(state.memberList);
       return {
-        ...state
+        ...state,
+        memberList: {
+          data: state.memberList.data.map(member => ({
+            ...member,
+            status: action.payload[member.uid]
+          }))
+        }
       };
 
     case UPDATE_MEMBER_LIST:

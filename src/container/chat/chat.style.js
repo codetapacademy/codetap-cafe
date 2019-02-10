@@ -31,6 +31,20 @@ export const ChatMemberAvatar = styled.div`
   margin: 5px;
   border-radius: 50%;
   background-image: url(${({ photoURL }) => photoURL});
+  position: relative;
+
+  &:after {
+    content: "";
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid white;
+    background-color: ${({ status }) =>
+      status === "online" ? "#69bd45" : "gray"};
+  }
 `;
 
 export const ChatMemberWrapper = styled.div`

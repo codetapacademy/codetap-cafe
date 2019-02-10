@@ -58,15 +58,9 @@ const useFirestoreQuery = (refChat, refMember, refStatus) => {
     });
 
     refStatus.on("value", snapshot => {
-      const statusObject = snapshot.val();
-      const statusList = Object.keys(statusObject).map(key => ({
-        id: key,
-        status: statusObject[key]
-      }));
-
       dispatch({
         type: UPDATE_MEMBER_STATUS,
-        payload: statusList
+        payload: snapshot.val()
       });
     });
   }, []);

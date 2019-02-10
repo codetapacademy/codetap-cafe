@@ -83,13 +83,11 @@ const Chat = () => {
           ))}
         </ChatBody>
         <ChatMemberList>
-          {memberList.data.map(({ id, photoURL, displayName, online }) => (
+          {memberList.data.map(({ id, photoURL, displayName, status }) => (
             <ChatMemberWrapper key={id}>
               <ChatMember>
-                <ChatMemberAvatar photoURL={photoURL} />
-                <ChatMemberName>
-                  {online + ""} {displayName}
-                </ChatMemberName>
+                <ChatMemberAvatar photoURL={photoURL} status={status} />
+                <ChatMemberName>{displayName}</ChatMemberName>
                 <div>🗨</div>
               </ChatMember>
             </ChatMemberWrapper>
