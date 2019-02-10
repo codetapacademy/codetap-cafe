@@ -1,9 +1,9 @@
 import { useEffect, useState, useContext } from "react";
 import { DispatchContext } from "../../redux";
 import { UPDATE_LIST } from "../auth/const";
-import { UPDATE_MEMBER_LIST } from "./const";
+import { UPDATE_MEMBER_LIST, UPDATE_MEMBER_STATUS } from "./const";
 
-const useFirestoreQuery = (refChat, refMember) => {
+const useFirestoreQuery = (refChat, refMember, refStatus) => {
   const [messageList, setMessageList] = useState({
     isLoading: true,
     data: []
@@ -54,6 +54,13 @@ const useFirestoreQuery = (refChat, refMember) => {
       setMemberList({
         isLoading: false,
         data: memberList
+      });
+    });
+
+    refStatus.on("value", snapshot => {
+      dispatch({
+        type: UPDATE_MEMBER_STATUS,
+        payload: snapshot.val()
       });
     });
   }, []);

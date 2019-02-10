@@ -1,6 +1,6 @@
 import React, { useState, useRef, Fragment } from "react";
 import TextArea from "../../component/text-area";
-import { firebase, firestore } from "../../firebase";
+import { firebase, firestore, database } from "../../firebase";
 import { getState } from "../../redux";
 import Button from "../../component/button";
 import useFirestoreQuery from "./chat.service";
@@ -29,7 +29,9 @@ const Chat = () => {
 
   const refChat = firestore.collection("chat").orderBy("updatedAt");
   const refMember = firestore.collection("member");
-  useFirestoreQuery(refChat, refMember);
+  const refStatus = database.ref("status");
+
+  useFirestoreQuery(refChat, refMember, refStatus);
 
   const handleButtonSubmit = () => {
     handleSubmit(currentMessage.trim());
@@ -81,10 +83,10 @@ const Chat = () => {
           ))}
         </ChatBody>
         <ChatMemberList>
-          {memberList.data.map(({ id, photoURL, displayName }) => (
-            <ChatMemberWrapper>
-              <ChatMember key={+id}>
-                <ChatMemberAvatar photoURL={photoURL} />
+          {memberList.data.map(({ id, photoURL, displayName, status }) => (
+            <ChatMemberWrapper key={id}>
+              <ChatMember>
+                <ChatMemberAvatar photoURL={photoURL} status={status} />
                 <ChatMemberName>{displayName}</ChatMemberName>
                 <div>🗨</div>
               </ChatMember>
