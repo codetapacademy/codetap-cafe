@@ -3,6 +3,7 @@ import Button from "../../component/button/button.component";
 import { firebase, firestore, database } from "../../firebase";
 import { getState, DispatchContext } from "../../redux";
 import { updateUser } from "./action";
+import { Link } from "@reach/router";
 import {
   AuthStyled,
   AuthGreetWrapper,
@@ -123,6 +124,12 @@ const Auth = () => {
         <>
           <AvatarStyled width={32} url={user.photoURL} />
           <AuthGreetWrapper>Welcome {user.displayName}!</AuthGreetWrapper>
+
+          <nav>
+            <Link to="/">Home</Link>
+            <Link to="/user">User</Link>
+          </nav>
+
           <ButtonWrapper>
             <Button {...logoutButtonProperties} />
           </ButtonWrapper>
