@@ -1,11 +1,13 @@
 import React, { useReducer } from "react";
 import "./codetap-cafe.css";
+import { Router } from "@reach/router";
 
 import Auth from "./container/auth";
 import { initialState, reducer } from "./redux";
 import Chat from "./container/chat";
 import styled from "styled-components";
 import { DispatchContext, StateContext } from "./redux";
+import UserList from "./container/user-list";
 
 const CodetapCafeWrapper = styled.div`
   height: 100%;
@@ -19,7 +21,10 @@ const CodetapCafe = () => {
       <StateContext.Provider value={state}>
         <CodetapCafeWrapper className="codetap-cafe">
           <Auth />
-          <Chat />
+          <Router>
+            <Chat path="/" />
+            <UserList path="/user" />
+          </Router>
         </CodetapCafeWrapper>
       </StateContext.Provider>
     </DispatchContext.Provider>
