@@ -4,7 +4,8 @@ export const ChatWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 200px;
   grid-template-rows: 1fr 60px;
-  height: calc(100% - 45px);
+  height: 100%;
+  // height: calc(100% - 45px);
   grid-gap: 5px;
   padding: 5px;
 `;

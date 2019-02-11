@@ -21,7 +21,7 @@ const CodetapCafe = () => {
       <StateContext.Provider value={state}>
         <CodetapCafeWrapper className="codetap-cafe">
           <Auth />
-          <Router>
+          <Router className="codetap-cafe__router-wrapper">
             <Chat path="/" />
             <UserList path="/user" />
           </Router>
