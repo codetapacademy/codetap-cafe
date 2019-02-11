@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "codetap-cafe",
+    "staging": "codetap-cafe"
+  }
+}
