@@ -4,6 +4,7 @@ import {
   UPDATE_MEMBER_LIST,
   UPDATE_MEMBER_STATUS
 } from "../container/chat/const";
+import { UPDATE_USER_LIST } from "../container/user-list/constant";
 
 export const initialState = {
   messageList: {
@@ -11,7 +12,11 @@ export const initialState = {
     data: []
   },
   memberList: {
-    isLoading: false,
+    isLoading: true,
+    data: []
+  },
+  userList: {
+    isLoading: true,
     data: []
   },
   user: null
@@ -29,6 +34,7 @@ export const reducer = (state, action) => {
       return {
         ...state,
         memberList: {
+          isLoading: false,
           data: state.memberList.data.map(member => ({
             ...member,
             status: action.payload[member.uid]
@@ -40,6 +46,15 @@ export const reducer = (state, action) => {
       return {
         ...state,
         memberList: {
+          data: action.payload
+        }
+      };
+
+    case UPDATE_USER_LIST:
+      return {
+        ...state,
+        userList: {
+          isLoading: false,
           data: action.payload
         }
       };
