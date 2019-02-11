@@ -35,13 +35,23 @@ const Auth = () => {
             .onDisconnect()
             .set("offline")
             .then(() => {
+              // This sets the online status in the old firebase
               database.ref(`/status/${uid}`).set("online");
-              memberRef.doc(uid).set(
-                {
-                  status: true
-                },
-                { merge: true }
-              );
+
+              // Check if the user exists in the member firestore and update its status if found
+              memberRef
+                .doc(uid)
+                .get()
+                .then(snap => {
+                  if (snap.exists) {
+                    memberRef.doc(uid).set(
+                      {
+                        status: "online"
+                      },
+                      { merge: true }
+                    );
+                  }
+                });
             });
         });
       } else {
