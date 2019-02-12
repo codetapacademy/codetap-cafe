@@ -3,6 +3,7 @@ import Button from "../../component/button/button.component";
 import { firebase, firestore, database } from "../../firebase";
 import { getState, DispatchContext } from "../../redux";
 import { updateUser } from "./action";
+import { Link } from "@reach/router";
 import {
   AuthStyled,
   AuthGreetWrapper,
@@ -17,7 +18,6 @@ const Auth = () => {
 
   const onlineRef = database.ref(".info/connected");
   const userRef = firestore.collection("user");
-  const memberRef = firestore.collection("member");
 
   useEffect(() => {
     // check if the user is already logged in
@@ -39,12 +39,12 @@ const Auth = () => {
               database.ref(`/status/${uid}`).set("online");
 
               // Check if the user exists in the member firestore and update its status if found
-              memberRef
+              userRef
                 .doc(uid)
                 .get()
                 .then(snap => {
                   if (snap.exists) {
-                    memberRef.doc(uid).set(
+                    userRef.doc(uid).set(
                       {
                         status: "online"
                       },
@@ -104,6 +104,19 @@ const Auth = () => {
         dispatch(updateUser(null));
       })
       .catch(error => console.log(`Sign out failed!`, error));
+    // userRef
+    //   .doc(uid)
+    //   .get()
+    //   .then(snap => {
+    //     if (snap.exists) {
+    //       userRef.doc(uid).set(
+    //         {
+    //           status: "offline"
+    //         },
+    //         { merge: true }
+    //       );
+    //     }
+    //   });
   };
 
   const loginButtonProperties = {
@@ -123,6 +136,12 @@ const Auth = () => {
         <>
           <AvatarStyled width={32} url={user.photoURL} />
           <AuthGreetWrapper>Welcome {user.displayName}!</AuthGreetWrapper>
+
+          <nav>
+            <Link to="/">Home</Link>
+            <Link to="/user">User</Link>
+          </nav>
+
           <ButtonWrapper>
             <Button {...logoutButtonProperties} />
           </ButtonWrapper>
