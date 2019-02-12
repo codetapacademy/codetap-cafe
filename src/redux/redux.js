@@ -46,7 +46,7 @@ export const reducer = (state, action) => {
       return {
         ...state,
         memberList: {
-          data: action.payload
+          data: [...state.memberList.data, ...action.payload]
         }
       };
 
