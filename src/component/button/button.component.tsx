@@ -8,7 +8,7 @@ const Button = (
     onClick,
     disabled = false,
     color
-  }: { label: string; onClick: any; disabled: boolean; color: string } = {
+  }: { label?: string; onClick?: any; disabled?: boolean; color?: string } = {
     label,
     onClick,
     disabled,
