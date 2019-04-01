@@ -8,6 +8,7 @@ import Chat from "./container/chat";
 import styled from "styled-components";
 import { DispatchContext, StateContext } from "./redux";
 import UserList from "./container/user-list";
+import Profile from "./container/profile";
 
 const CodetapCafeWrapper = styled.div`
   height: 100%;
@@ -24,6 +25,7 @@ const CodetapCafe = () => {
           <Router className="codetap-cafe__router-wrapper">
             <Chat path="/" />
             <UserList path="/user" />
+            <Profile path="/my-profile" />
           </Router>
         </CodetapCafeWrapper>
       </StateContext.Provider>

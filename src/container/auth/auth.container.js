@@ -140,6 +140,7 @@ const Auth = () => {
           <nav>
             <Link to="/">Home</Link>
             <Link to="/user">User</Link>
+            <Link to="/my-profile">Profile</Link>
           </nav>
 
           <ButtonWrapper>
